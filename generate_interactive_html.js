@@ -23,9 +23,8 @@ const better = data.filter(r => r.Impact === 'Bedre').length;
 const worse = data.filter(r => r.Impact === 'Dårligere').length;
 const similar = data.filter(r => r.Impact === 'Lignende').length;
 
-// Get unique franchisees and restaurants
-const franchisees = [...new Set(data.map(r => ({ id: r.FranchiseeId, name: r.Franchisee })))];
-const uniqueFranchisees = Array.from(new Map(franchisees.map(f => [f.id, f])).values());
+// Get unique restaurants
+const uniqueRestaurants = [...new Set(data.map(r => r.Restaurant))].sort();
 
 // Calculate average differences
 let totalTempDiff = 0, totalPrecipDiff = 0, totalSnowDiff = 0, count = 0;
@@ -355,9 +354,9 @@ const html = `<!DOCTYPE html>
 
         .hour-row {
             display: grid;
-            grid-template-columns: 80px 1fr 1fr 100px 100px;
-            gap: 15px;
-            padding: 12px;
+            grid-template-columns: 80px 120px 120px 120px 120px;
+            gap: 10px;
+            padding: 15px 12px;
             border-bottom: 1px solid #e5e7eb;
             align-items: center;
         }
@@ -367,9 +366,21 @@ const html = `<!DOCTYPE html>
         }
 
         .hour-row.header {
-            font-weight: 600;
-            background: #f3f4f6;
+            font-weight: 700;
+            background: #1f2937;
+            color: white;
             border-radius: 8px;
+            padding: 18px 12px;
+            font-size: 0.95em;
+        }
+
+        .hour-row > div {
+            text-align: center;
+        }
+
+        .hour-row > div:first-child {
+            text-align: left;
+            font-weight: 600;
         }
 
         .footer {
@@ -403,16 +414,10 @@ const html = `<!DOCTYPE html>
 
         <div class="filters">
             <div class="filter-group">
-                <label for="franchisee-filter">Franchisee</label>
-                <select id="franchisee-filter" onchange="filterByFranchisee()">
-                    <option value="">Alle Franchisees</option>
-                    ${uniqueFranchisees.map(f => `<option value="${f.id}">${f.name}</option>`).join('')}
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="restaurant-filter">Restaurant</label>
+                <label for="restaurant-filter">Vælg Restaurant</label>
                 <select id="restaurant-filter" onchange="filterByRestaurant()">
                     <option value="">Alle Restauranter</option>
+                    ${uniqueRestaurants.map(r => `<option value="${r}">${r}</option>`).join('')}
                 </select>
             </div>
         </div>
@@ -474,7 +479,7 @@ const html = `<!DOCTYPE html>
                           const tempDiff = temp2026 - temp2025;
                           const tempClass = tempDiff > 0 ? 'temp-positive' : tempDiff < 0 ? 'temp-negative' : '';
 
-                          return `<tr class="data-row" data-restaurant="${r.Restaurant}" data-franchisee="${r.FranchiseeId}">
+                          return `<tr class="data-row" data-restaurant="${r.Restaurant}">
                             ${restaurantCell}
                             <td><a class="date-link" onclick="showDetailedAnalysis('${r.Restaurant}', '${r.DateISO}')">${r.Dato}</a></td>
                             <td class="weekday">${r.Ugedag}</td>
@@ -519,53 +524,13 @@ const html = `<!DOCTYPE html>
         const allData = ${JSON.stringify(data)};
         const hourlyData = ${JSON.stringify(hourlyData)};
 
-        function filterByFranchisee() {
-            const franchiseeId = document.getElementById('franchisee-filter').value;
-            const restaurantFilter = document.getElementById('restaurant-filter');
-
-            // Update restaurant dropdown
-            restaurantFilter.innerHTML = '<option value="">Alle Restauranter</option>';
-
-            if (franchiseeId) {
-                const restaurants = [...new Set(allData
-                    .filter(r => r.FranchiseeId === franchiseeId)
-                    .map(r => r.Restaurant))];
-
-                restaurants.forEach(restaurant => {
-                    const option = document.createElement('option');
-                    option.value = restaurant;
-                    option.textContent = restaurant;
-                    restaurantFilter.appendChild(option);
-                });
-            }
-
-            // Apply filter
-            filterTable(franchiseeId, '');
-        }
-
         function filterByRestaurant() {
-            const franchiseeId = document.getElementById('franchisee-filter').value;
             const restaurant = document.getElementById('restaurant-filter').value;
-            filterTable(franchiseeId, restaurant);
-        }
-
-        function filterTable(franchiseeId, restaurant) {
             const rows = document.querySelectorAll('.data-row');
 
             rows.forEach(row => {
-                const rowFranchisee = row.getAttribute('data-franchisee');
                 const rowRestaurant = row.getAttribute('data-restaurant');
-
-                let show = true;
-
-                if (franchiseeId && rowFranchisee !== franchiseeId) {
-                    show = false;
-                }
-
-                if (restaurant && rowRestaurant !== restaurant) {
-                    show = false;
-                }
-
+                const show = !restaurant || rowRestaurant === restaurant;
                 row.classList.toggle('hidden', !show);
             });
         }
@@ -625,15 +590,15 @@ const html = `<!DOCTYPE html>
             }
 
             // Generate hourly comparison
-            let html = '<h3>Vejr time for time - 24 timers sammenligning</h3>';
-            html += '<p style="color: #6b7280; margin-bottom: 20px;">Sammenligning med samme ugedag sidste år for at hjælpe med planlægning af bemanding</p>';
+            let html = '<h3 style="color: #1f2937; margin-bottom: 10px;">Vejr time for time - 24 timers sammenligning</h3>';
+            html += '<p style="color: #6b7280; margin-bottom: 25px;">Sammenligning med samme ugedag sidste år for at hjælpe med planlægning af bemanding</p>';
             html += '<div class="hourly-chart">';
             html += '<div class="hour-row header">';
             html += '<div>Time</div><div>Temp ' + year + ' (°C)</div><div>Temp ' + (year-1) + ' (°C)</div><div>Nedbør ' + year + ' (mm)</div><div>Nedbør ' + (year-1) + ' (mm)</div>';
             html += '</div>';
 
             if (forecastStartIdx === -1 || historicalStartIdx === -1) {
-                html += '<p>Kunne ikke finde timedata for denne dato.</p>';
+                html += '<p style="padding: 20px; color: #6b7280;">Kunne ikke finde timedata for denne dato.</p>';
             } else {
                 // Show 24 hours for the selected date
                 for (let hour = 0; hour < 24; hour++) {
@@ -653,16 +618,24 @@ const html = `<!DOCTYPE html>
                     const tempDiff = parseFloat(fTemp) - parseFloat(hTemp);
                     const precipDiff = parseFloat(fPrecip) - parseFloat(hPrecip);
 
+                    let rowStyle = '';
                     let rowClass = '';
-                    if (precipDiff > 2) rowClass = ' style="background: #fee2e2;"'; // More rain this year
-                    else if (precipDiff < -2) rowClass = ' style="background: #d1fae5;"'; // Less rain this year
+                    if (precipDiff > 2) {
+                        rowStyle = ' style="background: #fee2e2; border-left: 4px solid #ef4444;"';
+                        rowClass = ' class="hour-row"';
+                    } else if (precipDiff < -2) {
+                        rowStyle = ' style="background: #d1fae5; border-left: 4px solid #10b981;"';
+                        rowClass = ' class="hour-row"';
+                    } else {
+                        rowClass = ' class="hour-row"';
+                    }
 
-                    html += \`<div class="hour-row"\${rowClass}>\`;
+                    html += \`<div\${rowClass}\${rowStyle}>\`;
                     html += \`<div>\${hour.toString().padStart(2, '0')}:00</div>\`;
-                    html += \`<div>\${fTemp}</div>\`;
-                    html += \`<div>\${hTemp}</div>\`;
-                    html += \`<div>\${fPrecip}</div>\`;
-                    html += \`<div>\${hPrecip}</div>\`;
+                    html += \`<div>\${fTemp}°</div>\`;
+                    html += \`<div>\${hTemp}°</div>\`;
+                    html += \`<div>\${fPrecip} mm</div>\`;
+                    html += \`<div>\${hPrecip} mm</div>\`;
                     html += \`</div>\`;
                 }
             }

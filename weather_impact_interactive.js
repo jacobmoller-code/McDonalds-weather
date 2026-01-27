@@ -146,7 +146,6 @@ async function processRestaurants(startDate = new Date()) {
   for (let i = 0; i < restaurants.length; i++) {
     const restaurant = restaurants[i];
     const restaurantName = restaurant.__EMPTY || restaurant.Restaurant || `Restaurant ${i+1}`;
-    const operator = restaurant.Operator || 'Unknown';
     const lat = restaurant.Latitude;
     const lon = restaurant.Longitude;
 
@@ -182,8 +181,7 @@ async function processRestaurants(startDate = new Date()) {
     // Store hourly data for detail pages
     hourlyData[restaurantName] = {
       forecast: forecastData.hourly,
-      historical: historicalData.hourly,
-      coords: { lat, lon }
+      historical: historicalData.hourly
     };
 
     // Create 7 rows (one per day)
@@ -204,8 +202,6 @@ async function processRestaurants(startDate = new Date()) {
 
       results.push({
         Restaurant: restaurantName,
-        Franchisee: operator,
-        FranchiseeId: operator, // Using operator as ID
         Dato: new Date(dateForecast).toLocaleDateString('da-DK', { day: '2-digit', month: '2-digit', year: 'numeric' }),
         DateISO: dateForecast,
         Ugedag: weekday,
