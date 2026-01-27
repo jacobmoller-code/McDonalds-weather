@@ -33,8 +33,8 @@ data.forEach(r => {
   const temp2025 = parseFloat(r['Temp 2025']);
   const precip2026 = parseFloat(r['Nedbør 2026']);
   const precip2025 = parseFloat(r['Nedbør 2025']);
-  const snow2026 = parseFloat(r['Sne 2026']);
-  const snow2025 = parseFloat(r['Sne 2025']);
+  const snow2026 = parseFloat(r['Snedybde 2026 (cm)']);
+  const snow2025 = parseFloat(r['Snedybde 2025 (cm)']);
 
   if (!isNaN(temp2026) && !isNaN(temp2025)) {
     totalTempDiff += (temp2026 - temp2025);
@@ -433,7 +433,7 @@ const html = `<!DOCTYPE html>
                     <div class="value">${avgPrecipDiff.toFixed(1)} mm</div>
                 </div>
                 <div class="weather-card">
-                    <h3>❄️ Gns. Sneforskel</h3>
+                    <h3>❄️ Gns. Snedybdeforskel</h3>
                     <div class="value">${avgSnowDiff.toFixed(1)} cm</div>
                 </div>
             </div>
@@ -464,8 +464,8 @@ const html = `<!DOCTYPE html>
                             <th>Temp 2025 (°C)</th>
                             <th>Nedbør 2026 (mm)</th>
                             <th>Nedbør 2025 (mm)</th>
-                            <th>Sne 2026 (cm)</th>
-                            <th>Sne 2025 (cm)</th>
+                            <th>Snedybde 2026 (cm)</th>
+                            <th>Snedybde 2025 (cm)</th>
                             <th>Impact</th>
                         </tr>
                     </thead>
@@ -487,8 +487,8 @@ const html = `<!DOCTYPE html>
                             <td>${r['Temp 2025']}</td>
                             <td>${r['Nedbør 2026']}</td>
                             <td>${r['Nedbør 2025']}</td>
-                            <td>${r['Sne 2026']}</td>
-                            <td>${r['Sne 2025']}</td>
+                            <td>${r['Snedybde 2026 (cm)']}</td>
+                            <td>${r['Snedybde 2025 (cm)']}</td>
                             <td>
                                 <span class="impact-badge impact-${r.Impact.toLowerCase()}">
                                     ${r.Impact === 'Bedre' ? '✅' : r.Impact === 'Dårligere' ? '⚠️' : '➖'} ${r.Impact}

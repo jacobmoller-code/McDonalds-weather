@@ -209,8 +209,8 @@ async function processRestaurants(startDate = new Date()) {
         'Temp 2025': lyTemp ? lyTemp.toFixed(1) : 'N/A',
         'Nedbør 2026': forecastPrecip ? forecastPrecip.toFixed(1) : 'N/A',
         'Nedbør 2025': lyPrecip ? lyPrecip.toFixed(1) : 'N/A',
-        'Sne 2026': forecastSnow ? forecastSnow.toFixed(1) : 'N/A',
-        'Sne 2025': lySnow ? lySnow.toFixed(1) : 'N/A',
+        'Snedybde 2026 (cm)': forecastSnow ? forecastSnow.toFixed(1) : 'N/A',
+        'Snedybde 2025 (cm)': lySnow ? lySnow.toFixed(1) : 'N/A',
         Impact: impact
       });
     }
