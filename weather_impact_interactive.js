@@ -38,7 +38,7 @@ async function getHourlyWeatherData(lat, lon, startDate, endDate) {
     `latitude=${lat}&longitude=${lon}` +
     `&start_date=${startDate}&end_date=${endDate}` +
     `&hourly=temperature_2m,precipitation,snowfall,weather_code,cloud_cover,wind_speed_10m` +
-    `&daily=temperature_2m_mean,precipitation_sum,snow_depth_mean` +
+    `&daily=temperature_2m_mean,precipitation_sum,snowfall_sum` +
     `&timezone=Europe/Copenhagen`;
 
   try {
@@ -54,7 +54,7 @@ async function getForecastWithHourly(lat, lon) {
   const url = `https://api.open-meteo.com/v1/forecast?` +
     `latitude=${lat}&longitude=${lon}` +
     `&hourly=temperature_2m,precipitation,snowfall,weather_code,cloud_cover,wind_speed_10m` +
-    `&daily=temperature_2m_mean,precipitation_sum,snow_depth_mean` +
+    `&daily=temperature_2m_mean,precipitation_sum,snowfall_sum` +
     `&timezone=Europe/Copenhagen&forecast_days=7`;
 
   try {
@@ -192,11 +192,11 @@ async function processRestaurants(startDate = new Date()) {
 
       const forecastTemp = forecastData.daily.temperature_2m_mean[day];
       const forecastPrecip = forecastData.daily.precipitation_sum[day];
-      const forecastSnow = forecastData.daily.snow_depth_mean[day];
+      const forecastSnow = forecastData.daily.snowfall_sum[day];
 
       const lyTemp = historicalData.daily.temperature_2m_mean[day];
       const lyPrecip = historicalData.daily.precipitation_sum[day];
-      const lySnow = historicalData.daily.snow_depth_mean[day];
+      const lySnow = historicalData.daily.snowfall_sum[day];
 
       const impact = calculateImpact(forecastTemp, lyTemp, forecastPrecip, lyPrecip, forecastSnow, lySnow);
 
@@ -209,8 +209,8 @@ async function processRestaurants(startDate = new Date()) {
         'Temp 2025': lyTemp ? lyTemp.toFixed(1) : 'N/A',
         'Nedbør 2026': forecastPrecip ? forecastPrecip.toFixed(1) : 'N/A',
         'Nedbør 2025': lyPrecip ? lyPrecip.toFixed(1) : 'N/A',
-        'Snedybde 2026 (cm)': forecastSnow ? forecastSnow.toFixed(1) : 'N/A',
-        'Snedybde 2025 (cm)': lySnow ? lySnow.toFixed(1) : 'N/A',
+        'Snefald 2026 (cm)': forecastSnow ? forecastSnow.toFixed(1) : 'N/A',
+        'Snefald 2025 (cm)': lySnow ? lySnow.toFixed(1) : 'N/A',
         Impact: impact
       });
     }

@@ -33,8 +33,8 @@ data.forEach(r => {
   const temp2025 = parseFloat(r['Temp 2025']);
   const precip2026 = parseFloat(r['Nedbør 2026']);
   const precip2025 = parseFloat(r['Nedbør 2025']);
-  const snow2026 = parseFloat(r['Snedybde 2026 (cm)']);
-  const snow2025 = parseFloat(r['Snedybde 2025 (cm)']);
+  const snow2026 = parseFloat(r['Snefald 2026 (cm)']);
+  const snow2025 = parseFloat(r['Snefald 2025 (cm)']);
 
   if (!isNaN(temp2026) && !isNaN(temp2025)) {
     totalTempDiff += (temp2026 - temp2025);
@@ -74,48 +74,49 @@ const html = `<!DOCTYPE html>
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Speedee', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #F9F9F9;
+            padding: 0;
             min-height: 100vh;
+            margin: 0;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1170px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .header {
-            background: linear-gradient(135deg, #DA291C 0%, #FFC72C 100%);
+            background: #DA291C;
             color: white;
-            padding: 40px;
-            text-align: center;
+            padding: 30px 40px;
             position: relative;
+            border-bottom: 4px solid #FFBC0D;
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-size: 2.25em;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .header h2 {
-            font-size: 1.5em;
-            font-weight: 300;
-            margin-bottom: 20px;
+            font-size: 1.125em;
+            font-weight: 400;
+            margin-bottom: 15px;
+            opacity: 0.95;
         }
 
 
         .filters {
             display: flex;
             gap: 20px;
-            padding: 30px 40px;
-            background: #f9fafb;
-            border-bottom: 2px solid #e5e7eb;
+            padding: 25px 40px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -127,48 +128,58 @@ const html = `<!DOCTYPE html>
 
         .filter-group label {
             display: block;
-            font-size: 0.9em;
+            font-size: 0.875rem;
             font-weight: 600;
-            color: #374151;
+            color: #292929;
             margin-bottom: 8px;
         }
 
         .filter-group select {
             width: 100%;
-            padding: 10px 15px;
-            border: 2px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 1em;
+            padding: 12px 16px;
+            border: 2px solid #d1d1d1;
+            border-radius: 0.25rem;
+            font-size: 1rem;
             background: white;
             cursor: pointer;
-            transition: border-color 0.2s;
+            transition: all 0.2s;
+            color: #292929;
+        }
+
+        .filter-group select:hover {
+            border-color: #FFBC0D;
         }
 
         .filter-group select:focus {
             outline: none;
-            border-color: #DA291C;
+            border-color: #FFBC0D;
+            box-shadow: 0 0 0 3px rgba(255, 188, 13, 0.1);
         }
 
         .content {
             padding: 40px;
+            background: #F9F9F9;
         }
 
         .interpretation {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 20px;
+            background: #FFF8E1;
+            border-left: 4px solid #FFBC0D;
+            padding: 24px;
             margin: 30px 0;
-            border-radius: 8px;
+            border-radius: 0.25rem;
         }
 
         .interpretation h3 {
-            color: #92400e;
-            margin-bottom: 15px;
+            color: #292929;
+            margin-bottom: 12px;
+            font-size: 1.125rem;
+            font-weight: 600;
         }
 
         .interpretation p {
-            line-height: 1.6;
-            color: #78350f;
+            line-height: 1.5;
+            color: #505050;
+            font-size: 0.9375rem;
         }
 
         .weather-details {
@@ -179,22 +190,33 @@ const html = `<!DOCTYPE html>
         }
 
         .weather-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: white;
+            border: 2px solid #e0e0e0;
+            color: #292929;
             padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+        }
+
+        .weather-card:hover {
+            border-color: #FFBC0D;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
         }
 
         .weather-card h3 {
-            font-size: 0.95em;
-            opacity: 0.9;
-            margin-bottom: 10px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #707070;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .weather-card .value {
-            font-size: 2.2em;
-            font-weight: bold;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #DA291C;
         }
 
         .table-container {
@@ -206,23 +228,21 @@ const html = `<!DOCTYPE html>
             width: 100%;
             border-collapse: collapse;
             background: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            font-size: 0.9em;
+            border: 1px solid #e0e0e0;
+            font-size: 0.875rem;
         }
 
         thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #292929;
             color: white;
         }
 
         th {
-            padding: 12px 10px;
+            padding: 14px 12px;
             text-align: left;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.75em;
+            font-size: 0.75rem;
             letter-spacing: 0.5px;
         }
 
@@ -233,10 +253,11 @@ const html = `<!DOCTYPE html>
 
         tbody tr {
             transition: background 0.2s;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         tbody tr:hover {
-            background: #f9fafb;
+            background: #FFF8E1;
         }
 
         tbody tr.hidden {
@@ -249,7 +270,7 @@ const html = `<!DOCTYPE html>
         }
 
         .date-link {
-            color: #3b82f6;
+            color: #DA291C;
             text-decoration: none;
             font-weight: 600;
             cursor: pointer;
@@ -257,7 +278,7 @@ const html = `<!DOCTYPE html>
         }
 
         .date-link:hover {
-            color: #1d4ed8;
+            color: #FFBC0D;
             text-decoration: underline;
         }
 
@@ -279,18 +300,21 @@ const html = `<!DOCTYPE html>
         }
 
         .impact-bedre {
-            background: #d1fae5;
-            color: #065f46;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
 
         .impact-dårligere {
-            background: #fee2e2;
-            color: #991b1b;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
 
         .impact-lignende {
-            background: #e5e7eb;
-            color: #374151;
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
         }
 
         /* Modal styles */
@@ -433,7 +457,7 @@ const html = `<!DOCTYPE html>
                     <div class="value">${avgPrecipDiff.toFixed(1)} mm</div>
                 </div>
                 <div class="weather-card">
-                    <h3>❄️ Gns. Snedybdeforskel</h3>
+                    <h3>❄️ Gns. Snefaldforskel</h3>
                     <div class="value">${avgSnowDiff.toFixed(1)} cm</div>
                 </div>
             </div>
@@ -464,8 +488,8 @@ const html = `<!DOCTYPE html>
                             <th>Temp 2025 (°C)</th>
                             <th>Nedbør 2026 (mm)</th>
                             <th>Nedbør 2025 (mm)</th>
-                            <th>Snedybde 2026 (cm)</th>
-                            <th>Snedybde 2025 (cm)</th>
+                            <th>Snefald 2026 (cm)</th>
+                            <th>Snefald 2025 (cm)</th>
                             <th>Impact</th>
                         </tr>
                     </thead>
@@ -487,8 +511,8 @@ const html = `<!DOCTYPE html>
                             <td>${r['Temp 2025']}</td>
                             <td>${r['Nedbør 2026']}</td>
                             <td>${r['Nedbør 2025']}</td>
-                            <td>${r['Snedybde 2026 (cm)']}</td>
-                            <td>${r['Snedybde 2025 (cm)']}</td>
+                            <td>${r['Snefald 2026 (cm)']}</td>
+                            <td>${r['Snefald 2025 (cm)']}</td>
                             <td>
                                 <span class="impact-badge impact-${r.Impact.toLowerCase()}">
                                     ${r.Impact === 'Bedre' ? '✅' : r.Impact === 'Dårligere' ? '⚠️' : '➖'} ${r.Impact}
