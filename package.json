@@ -1,0 +1,15 @@
+{
+  "name": "mcdonalds-weather-impact",
+  "version": "1.0.0",
+  "description": "Weather impact analysis for McDonald's Denmark restaurants",
+  "main": "weather_impact_interactive.js",
+  "scripts": {
+    "update": "node weather_impact_interactive.js && node generate_interactive_html.js"
+  },
+  "keywords": ["weather", "analytics", "mcdonalds"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}

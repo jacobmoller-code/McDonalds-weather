@@ -1,0 +1,43 @@
+# Node modules
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Old output files (keep only index.html)
+weather_impact_interactive.html
+weather_impact_results.xlsx
+weather_impact_daily.xlsx
+weather_impact_report.pdf
+weather_impact_report.html
+weather_impact_daily.html
+weather_impact_interactive_OLD.js
+weather_impact_model.js
+weather_impact_daily.js
+generate_pdf.js
+generate_html.js
+generate_html_daily.js
+
+# Old master data (keep only new one)
+McDonald restaurants.xlsx
+
+# Keep these files for GitHub Pages and auto-update
+!index.html
+!weather_impact_interactive.xlsx
+!hourly_weather_data.json
+!Restaurant geo location.xlsx
+!weather_impact_interactive.js
+!generate_interactive_html.js

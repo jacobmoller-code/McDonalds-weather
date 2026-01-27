@@ -1,0 +1,44 @@
+name: Update Weather Data
+
+on:
+  schedule:
+    # Run daily at 6:00 AM UTC (7:00 AM CET in winter, 8:00 AM CEST in summer)
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Allow manual trigger
+  push:
+    branches:
+      - main
+
+jobs:
+  update-weather:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run weather analysis
+        run: node weather_impact_interactive.js
+        continue-on-error: false
+
+      - name: Generate HTML report
+        run: node generate_interactive_html.js
+        continue-on-error: false
+
+      - name: Commit and push if changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add index.html weather_impact_interactive.xlsx hourly_weather_data.json
+          git diff --staged --quiet || git commit -m "Update weather data - $(date +'%Y-%m-%d %H:%M UTC')"
+          git push
